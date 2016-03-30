@@ -1,0 +1,292 @@
+#incl#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+struct Alien_t{
+	char nombre[30];
+	int id;
+	char especie[10];
+	struct planetas_t *planetas;
+	struct idiomas_t *idiomas;
+	struct Alien_t *siguiente;
+}; typedef struct Alien_t alien;
+
+struct planetas_t{
+	char nombre[30];
+	int starwars_code;
+	char agua[10];
+	char oxigeno[10];
+	struct planetas_t *siguiente;
+}; typedef struct planetas_t planeta;
+
+struct idiomas_t{
+	char nombre[30];
+	char tipo[10];
+	int simbolos;
+	struct idiomas_t * siguiente;
+	struct planetas_t *planetas;
+}; typedef struct idiomas_t idioma;
+
+alien *lista_aliens;
+void Insertar(struct Alien_t *v){
+	alien *anterior;
+	if(lista_aliens==NULL || lista_aliens->id > v->id) { // Si lista está vacia               
+		lista_aliens = malloc(sizeof(struct Alien_t));//asigna a lista_aliens un nuevo nodo
+		lista_aliens = v;                             //de valor alien v
+	}
+	else { // buscar el nodo de valor menor a v 
+		anterior = lista_aliens;
+		alien *temp;
+		while(anterior->siguiente && anterior->siguiente->id <= v->id ){ // avanza hasta el último elemento o hasta que el
+                        anterior=anterior->siguiente;
+                }
+		anterior->siguiente = malloc(sizeof(struct Alien_t));// creamos un nuevo nodo después del nodo anterior
+		anterior->siguiente = v; //asigno a siguiente el valor de v
+	}
+} // Insertar
+
+void Borrar(int v){
+	alien *anterior, *nodo;
+	nodo = lista_aliens;
+	anterior = NULL;
+	while(nodo!=NULL && nodo->id < v) { //si nodo esta vacido o id es menor que el id entrante
+		anterior = nodo;          
+		nodo = nodo->siguiente;
+	}
+	if(nodo==NULL || nodo->id  != v); 
+	else { // Borrar el nodo 
+		if(anterior==NULL) // Primer elemento 
+			lista_aliens = nodo->siguiente;
+		else  // un elemento x
+			anterior->siguiente = nodo->siguiente;
+		free(nodo);
+   	}   
+} // Borrar
+
+void Mostrar(){
+	alien *aux;
+	aux = lista_aliens;
+	printf("\n\n");
+	while (aux!=NULL){
+		printf ("Nombre: %s\n",aux->nombre);
+        	printf ("Id: %d\n",aux->id);
+        	printf ("Especie: %s\n",aux->especie);
+    		printf ("Planeta: %s\n",aux->planetas->nombre);
+    		printf ("Starwars_code: %d\n",aux->planetas->starwars_code);
+    		printf ("Agua: %s\n",aux->planetas->agua);
+    		printf ("Oxigeno: %s\n",aux->planetas->oxigeno);
+    		printf ("Idioma: %s\n",aux->idiomas->nombre);
+    		printf ("Tipo: %s\n",aux->idiomas->tipo);
+    		printf ("Simbolos: %d\n",aux->idiomas->simbolos);
+    		printf ("Nombre del planeta donde se habla ese idioma: %s\n",aux->idiomas->planetas->nombre);
+    		printf ("Starwars_code: %d\n",aux->idiomas->planetas->starwars_code);
+    		printf ("Agua: %s\n",aux->idiomas->planetas->agua);
+    		printf ("Oxigeno: %s\n",aux->idiomas->planetas->oxigeno);
+		printf("*********************************************************************************************\n\n");
+		aux=aux->siguiente;
+	}
+} // Mostrar
+
+void Mostrar_alien(int x){
+	alien *aux;
+	aux = lista_aliens;
+	printf("\n\n");	
+	while(aux!=NULL){
+		if(aux->id == x){
+			printf ("Nombre: %s\n",aux->nombre);
+        		printf ("Id: %d\n",aux->id);
+        		printf ("Especie: %s\n",aux->especie);
+    			printf ("Planeta: %s\n",aux->planetas->nombre);
+    			printf ("Starwars_code: %d\n",aux->planetas->starwars_code);
+    			printf ("Agua: %s\n",aux->planetas->agua);
+    			printf ("Oxigeno: %s\n",aux->planetas->oxigeno);
+    			printf ("Idioma: %s\n",aux->idiomas->nombre);
+    			printf ("Tipo: %s\n",aux->idiomas->tipo);
+    			printf ("Simbolos: %d\n",aux->idiomas->simbolos);
+    			printf ("Nombre del planeta donde se habla ese idioma: %s\n",aux->idiomas->planetas->nombre);
+    			printf ("Starwars_code: %d\n",aux->idiomas->planetas->starwars_code);
+    			printf ("Agua: %s\n",aux->idiomas->planetas->agua);
+    			printf ("Oxigeno: %s\n",aux->idiomas->planetas->oxigeno);
+			printf("*********************************************************************************************\n\n");
+		}
+		aux=aux->siguiente;
+	}
+} // Mostrar un alien
+
+void Editar_alien(int x){
+	alien *aux;
+	aux = lista_aliens;
+	while(aux!=NULL){
+		if(aux->id == x){
+			printf("Nombre del Alien: ");
+			scanf("%s", aux->nombre);
+			printf("Especie del Alien: ");
+			scanf("%s", aux->especie);
+			printf("Nombre del planeta del Alien: ");
+			scanf("%s", aux->planetas->nombre);
+			printf("Starwars_code del planeta: ");
+			scanf("%d", &aux->planetas->starwars_code);
+			printf("¿Hay agua?: ");
+			scanf("%s", aux->planetas->agua);
+			printf("¿Hay oxigeno?: ");
+			scanf("%s", aux->planetas->oxigeno);
+			printf("Nombre del Idioma del planeta del Alien correspondiente: ");
+			scanf("%s", aux->idiomas->nombre);
+			printf("Tipo del Alien: ");			
+			scanf("%s", aux->idiomas->tipo);
+			printf("Cantidad de simbolos que usan: ");
+			scanf("%d", &aux->idiomas->simbolos);
+			printf("Nombre del planeta donde se habla ese idioma: ");
+			scanf("%s", aux->idiomas->planetas->nombre);
+			printf("Starwars_code del planeta: ");
+			scanf("%d", &aux->idiomas->planetas->starwars_code);
+			printf("¿Hay agua?: ");
+			scanf("%s", aux->idiomas->planetas->agua);
+			printf("¿Hay oxigeno?: ");
+			scanf("%s", aux->idiomas->planetas->oxigeno);
+		}
+		aux=aux->siguiente;
+	}
+} // Edita un alien 
+int main(){
+	alien *nuevo;
+	char opcion;
+	int prueba;
+	do{
+		printf("Lista de aliens\n\n");
+		printf("Que Desea hacer:\n");
+		printf("a) Agregar un alien\n");
+		printf("b) Eliminar un alien\n");
+		printf("c) Ver informacion de todos los aliens.\n");
+		printf("d) Ver informacion de un alien en especifico.\n");
+		printf("e) Editar informacion de un alien.\n");
+		printf("f) salir.\n");
+		printf("Ingrese una opcion: ");
+		scanf("%c",&opcion);
+		switch(opcion){
+			case 'a':
+				nuevo = malloc(sizeof(struct Alien_t));
+				printf("Nombre del Alien: ");
+				scanf("%s",nuevo->nombre);
+				printf("Id del Alien: ");
+				scanf("%d",&nuevo->id);
+				printf("Especie del alien: ");
+				scanf("%s",nuevo->especie);
+				nuevo->planetas=malloc(sizeof(struct planetas_t));
+				printf("Nombre del planeta del Alien: ");
+				scanf("%s",nuevo->planetas->nombre);
+				printf("Starwars_code del planeta: ");
+				scanf("%d",&nuevo->planetas->starwars_code);
+				printf("¿Hay agua?: ");
+				scanf("%s",nuevo->planetas->agua);
+				printf("¿Hay oxigeno?: ");
+				scanf("%s",nuevo->planetas->oxigeno);
+				nuevo->idiomas=malloc(sizeof(struct idiomas_t));
+				printf("Nombre del Idioma del planeta del Alien correspondiente: ");
+				scanf("%s",nuevo->idiomas->nombre);
+				printf("Tipo de idioma: ");			
+				scanf("%s",nuevo->idiomas->tipo);
+				printf("Cantidad de simbolos que usan: ");
+				scanf("%d",&nuevo->idiomas->simbolos);
+				nuevo->idiomas->planetas = malloc(sizeof(struct planetas_t));
+				printf("Nombre del planeta donde se habla ese idioma: ");
+				scanf("%s",nuevo->idiomas->planetas->nombre);
+				printf("Starwars_code del planeta: ");
+				scanf("%d",&nuevo->idiomas->planetas->starwars_code);
+				printf("¿Hay agua?: ");
+				scanf("%s",nuevo->idiomas->planetas->agua);
+				printf("¿Hay oxigeno?: ");
+				scanf("%s",nuevo->idiomas->planetas->oxigeno);
+				Insertar(nuevo);
+				break;
+			case 'b':
+				printf("Digite el Id del Alien a borrar: ");
+				scanf("%d",&prueba);
+				Borrar(prueba);
+				break;
+			case 'c':
+				Mostrar();
+				break;
+			case 'd':
+				printf("Digite el Id del Alien para ver su informacion: ");
+				scanf("%d",&prueba);
+				Mostrar_alien(prueba);
+				break;
+			case 'e':
+				printf("Digite el Id del Alien a editar:");
+				scanf("%d",&prueba);
+				Editar_alien(prueba);
+				break;
+			case 'f':
+				break;
+			default: 
+				printf("Opcion mal ingresada.\n");
+				break;
+		}	
+	}while(opcion!='f');
+return 0;
+}ude <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+struct Alien_t{
+	char nombre[30];
+	int id;
+	char especie;
+	struct planetas_t *planetas;
+	struct idiomas_t *idiomas;
+	struct alien_t *siguiente;
+}; typedef struct Alien_t alien;
+
+struct planetas_t{
+	char nombre[30];
+	int starwars_code;
+	char agua;
+	char oxigeno;
+	struct planetas_ *siguiente;
+}; typedef struct planetas_t planeta;
+
+struct idiomas_t{
+	char nombre[30];
+	char tipo;
+	int simbolos;
+	struct idiomas * siguientes;
+	struct planetas_t *planetas;
+}; typedef struct idiomas_t idioma;
+
+alien *lista_aliens;
+int main(){
+	lista_aliens = malloc(sizeof(struct Alien_t));
+	strcpy(lista_aliens->nombre, "Alien1:Alf");
+	lista_aliens->id = 2246124;
+	lista_aliens->especie = '1';
+	lista_aliens->planetas=malloc(sizeof(struct planetas_t));
+	strcpy(lista_aliens->planetas->nombre,"namekusei");
+	lista_aliens->planetas->starwars_code = 255124;
+	lista_aliens->planetas->agua = 's';
+	lista_aliens->planetas->oxigeno = 's';
+	lista_aliens->idiomas=malloc(sizeof(struct idiomas_t));
+	strcpy(lista_aliens->idiomas->nombre,"nameku");
+	lista_aliens->idiomas->tipo= 'j';
+	lista_aliens->idiomas->simbolos= 61;
+	lista_aliens->idiomas->planetas = malloc(sizeof(struct planetas_t));
+	strcpy(lista_aliens->idiomas->planetas->nombre,"namekusei");
+	lista_aliens->idiomas->planetas->starwars_code = 255124;
+	lista_aliens->idiomas->planetas->agua = 's';
+	lista_aliens->idiomas->planetas->oxigeno = 's';
+    printf ("Nombre: %s\n",lista_aliens->nombre);
+    printf ("Id: %d\n",lista_aliens->id);
+    printf ("Especie: %d\n",lista_aliens->especie);
+    printf ("Planeta: %s\n",lista_aliens->planetas->nombre);
+    printf ("Starwars_code: %d\n",lista_aliens->planetas->starwars_code);
+    printf ("Agua: %d\n",lista_aliens->planetas->agua);
+    printf ("Oxigeno: %d\n",lista_aliens->planetas->oxigeno);
+    printf ("Idioma: %s\n",lista_aliens->idiomas->nombre);
+    printf ("Tipo: %d\n",lista_aliens->idiomas->tipo);
+    printf ("Simbolos: %d\n",lista_aliens->idiomas->simbolos);
+    printf ("Nombre del planeta donde se habla ese idioma: %s\n",lista_aliens->idiomas->planetas->nombre);
+    printf ("Starwars_code: %d\n",lista_aliens->idiomas->planetas->starwars_code);
+    printf ("Agua: %d\n",lista_aliens->idiomas->planetas->agua);
+    printf ("Oxigeno: %d\n",lista_aliens->idiomas->planetas->oxigeno);
+return 0;
+}
